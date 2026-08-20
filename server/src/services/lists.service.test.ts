@@ -28,8 +28,16 @@ describe('listsService', () => {
     expect(listsService.getById(list.id).description).toBe('Third');
   });
 
+  it('rejects a duplicate list name (case-insensitive)', () => {
+    expect(() => listsService.create({ name: 'alpha' })).toThrow(ConflictError);
+  });
+
   it('updates a list', () => {
     expect(listsService.update('list_b', { name: 'Renamed' }).name).toBe('Renamed');
+  });
+
+  it('rejects renaming a list to an existing name', () => {
+    expect(() => listsService.update('list_b', { name: 'Alpha' })).toThrow(ConflictError);
   });
 
   it('refuses to remove a list that still has todos', () => {
