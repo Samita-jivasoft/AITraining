@@ -17,6 +17,10 @@ export const listsService = {
   },
 
   create(input: { name: string; description?: string }): List {
+    const nameTaken = listsRepository
+      .findAll()
+      .some((l) => l.name.toLowerCase() === input.name.toLowerCase());
+    if (nameTaken) throw new ConflictError(`A list named '${input.name}' already exists`);
     const list: List = { id: newId('list'), ...input, createdAt: new Date().toISOString() };
     listsRepository.insert(list);
     logger.info('lists.service', 'created list', { id: list.id });
@@ -25,6 +29,12 @@ export const listsService = {
 
   update(id: string, changes: { name?: string; description?: string }): List {
     this.getById(id);
+    if (changes.name) {
+      const nameTaken = listsRepository
+        .findAll()
+        .some((l) => l.id !== id && l.name.toLowerCase() === changes.name!.toLowerCase());
+      if (nameTaken) throw new ConflictError(`A list named '${changes.name}' already exists`);
+    }
     const updated = listsRepository.update(id, changes)!;
     logger.info('lists.service', 'updated list', { id });
     return updated;
