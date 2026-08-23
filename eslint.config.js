@@ -16,7 +16,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**/*.mjs', '.claude/hooks/**/*.js'],
+    files: ['scripts/**/*.mjs', '.claude/hooks/**/*.js', 'docs/labs/snippets/**/*.js'],
     languageOptions: {
       globals: { console: 'readonly', process: 'readonly' },
     },
