@@ -1,6 +1,25 @@
 {
   "permissions": {
-    "deny": ["Edit(server/data/seed.json)", "Write(server/data/seed.json)"]
+    "ask": [
+      "Bash(rm *)",
+      "Bash(npm install *)",
+      "Bash(npx *)",
+      "Bash(chmod *)",
+      "Bash(git push *)"
+    ],
+    "deny": [
+      "Edit(server/data/seed.json)",
+      "Write(server/data/seed.json)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(npm publish *)",
+      "Bash(curl * | bash)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | bash)",
+      "Bash(wget * | sh)"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -10,6 +29,14 @@
           {
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-seed.js\""
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-env.js\""
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-conventions.js\""
           }
         ]
       }
